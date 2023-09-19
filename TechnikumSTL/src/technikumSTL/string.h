@@ -19,15 +19,16 @@ class string
     friend std::ostream& operator<<(std::ostream& os, const string& str);
 
 public:
+    string();
     string(const string& str);
     string(const char* str);
     ~string();
     
-    void reserve(unsigned int size);
+    void reserve(unsigned int capacity);  // capacity does not include \0 !
     unsigned int capacity() const;
 
-    string& append(const string& str);
-    string& append(const char* str);
+    void append(const string& other);
+    void append(const char* other);
 
     const char* c_str() const;
     unsigned int length() const;
@@ -35,6 +36,8 @@ public:
 
 private:
     char* str_ = nullptr;
+    unsigned int size_;
+    unsigned int capacity_;
 };
 
 };  // technikum
