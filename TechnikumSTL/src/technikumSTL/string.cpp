@@ -63,6 +63,8 @@ namespace technikum
 
     void string::reserve(unsigned int capacity)
     {
+        // TODO Check for minimum capacity that can be reserved.
+
         // If we want to reserve less characters than our string currently holds do nothing.
         if (capacity <= size_) return;
 
