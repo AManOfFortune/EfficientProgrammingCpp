@@ -36,7 +36,7 @@ namespace technikum
     {
         size_ = 0;
         capacity_ = size_ + 1;  // + 1 for the terminating null character!
-        str_ = new char[capacity_];
+        str_ = new char[capacity_];  // TODO Increase minimum capacity to prevent memory fragmentation!
         strcpy("", str_);
     }
 
@@ -50,13 +50,15 @@ namespace technikum
     {
         size_ = strlen(str);
         capacity_ = size_ + 1;  // + 1 for the terminating null character!
-        str_ = new char[capacity_];
+        str_ = new char[capacity_];  // TODO Increase minimum capacity to prevent memory fragmentation!
         strcpy(str, str_);
     }
 
     string::~string()
     {
-        delete str_;
+        assert(str_ != nullptr);
+
+        delete[] str_;
     }
 
     void string::reserve(unsigned int capacity)
@@ -69,7 +71,7 @@ namespace technikum
         // Temporarily store our string
         string temp(str_);
         // Free the allocated memory.
-        delete str_;
+        delete[] str_;
         // Update capacity_.
         capacity_ = capacity + 1;
         // Allocate new memory with size: capacity + 1 (for \0!)
