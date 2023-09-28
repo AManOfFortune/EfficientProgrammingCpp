@@ -72,8 +72,6 @@ namespace technikum
         free_memory();
         // Update capacity_.
         capacity_ = capacity;
-        // Update size_ (size does not count '\0' therefore -1)
-        size_ = capacity - 1;
         // Allocate new memory with size of capacity.
         str_ = new char[capacity];
         // Copy the temp string back.
@@ -107,6 +105,9 @@ namespace technikum
             str_[i] = other[j];
         }
         str_[i] = '\0';
+
+        // Save new size of string
+        size_ = strlen(str_);
 
         return *this;
     }
