@@ -1,5 +1,6 @@
 #include "string.h"
 
+#include <algorithm>
 #include <cassert>
 
 namespace technikum
@@ -35,8 +36,8 @@ namespace technikum
     string::string()
     {
         size_ = 0;
-        capacity_ = size_ + 1;  // + 1 for the terminating null character!
-        str_ = new char[capacity_];  // TODO Increase minimum capacity to prevent memory fragmentation!
+        capacity_ = string::kMinimumCapacity;
+        str_ = new char[capacity_];
         strcpy("", str_);
     }
 
@@ -49,8 +50,8 @@ namespace technikum
     string::string(const char* str)
     {
         size_ = strlen(str);
-        capacity_ = size_ + 1;  // + 1 for the terminating null character!
-        str_ = new char[capacity_];  // TODO Increase minimum capacity to prevent memory fragmentation!
+        capacity_ = std::max(size_ + 1, string::kMinimumCapacity);
+        str_ = new char[capacity_];
         strcpy(str, str_);
     }
 
@@ -63,10 +64,11 @@ namespace technikum
 
     void string::reserve(unsigned int capacity)
     {
-        // TODO Check for minimum capacity that can be reserved.
-
         // If we want to reserve less characters than our string currently holds do nothing.
         if (capacity <= size_) return;
+
+        // Do not reserve less than the minimum capacity.
+        capacity = std::max(capacity, string::kMinimumCapacity);
 
         assert(str_ != nullptr);
 
@@ -75,9 +77,9 @@ namespace technikum
         // Free the allocated memory.
         delete[] str_;
         // Update capacity_.
-        capacity_ = capacity + 1;
-        // Allocate new memory with size: capacity + 1 (for \0!)
-        str_ = new char[capacity + 1];
+        capacity_ = capacity;
+        // Allocate new memory with size of capacity.
+        str_ = new char[capacity];
         // Copy the temp string back.
         strcpy(temp.c_str(), str_);
     }

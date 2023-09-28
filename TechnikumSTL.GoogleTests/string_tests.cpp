@@ -92,38 +92,45 @@ TEST(StringTests, c_strShouldEqualOtherString)
     ASSERT_TRUE(strcmp(s.c_str(), other.c_str()) == 0);
 }
 
-TEST(StringTests, capacityShouldBeOne)
+TEST(StringTests, capacityShouldBeMinimumCapacity)
 {
     technikum::string s;
-    ASSERT_EQ(s.capacity(), 1);
+    ASSERT_EQ(s.capacity(), technikum::string::kMinimumCapacity);
 }
 
-TEST(StringTests, capacityShouldBeSeven)
+TEST(StringTests, capacityShouldBeTwenty)
 {
-    technikum::string s("Hello!");
-    ASSERT_EQ(s.capacity(), 7);
+    technikum::string s("Lorem ipsum gravida");
+    ASSERT_EQ(s.capacity(), 20);
 }
 
-TEST(StringTests, capacityShouldBeFourteen)
+TEST(StringTests, capacityShouldBeTwentyone)
 {
-    technikum::string helloWorld("Hello, world!");
+    technikum::string helloWorld("Lorem ipsum gravida.");
     technikum::string s(helloWorld);
-    ASSERT_EQ(s.capacity(), 14);
+    ASSERT_EQ(s.capacity(), 21);
 }
 
-TEST(StringTests, capacityShouldBeFiveAfterReserve)
+TEST(StringTests, capacityShouldBeMinimumCapacityAfterReserve)
 {
     technikum::string s;
     s.reserve(4);
-    ASSERT_EQ(s.capacity(), 5);
+    ASSERT_EQ(s.capacity(), technikum::string::kMinimumCapacity);
 }
 
-TEST(StringTests, capacityShouldBeFiveAfterMultipleReserves)
+TEST(StringTests, capacityShouldUpdateAfterReserve)
 {
     technikum::string s;
-    s.reserve(10);
-    s.reserve(4);
-    ASSERT_EQ(s.capacity(), 5);
+    s.reserve(20);
+    ASSERT_EQ(s.capacity(), 20);
+}
+
+TEST(StringTests, capacityShouldUpdateAfterMultipleReserves)
+{
+    technikum::string s;
+    s.reserve(24);
+    s.reserve(32);
+    ASSERT_EQ(s.capacity(), 32);
 }
 
 TEST(StringTests, c_strShouldStayTheSameAfterReserve)

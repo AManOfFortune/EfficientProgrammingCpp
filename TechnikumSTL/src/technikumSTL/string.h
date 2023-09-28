@@ -34,6 +34,8 @@ public:
     unsigned int length() const;
     unsigned int size() const;
 
+    constexpr static unsigned int kMinimumCapacity = 16;  // Length would be -1 because of \0
+
 private:
     char* str_ = nullptr;
     unsigned int size_;
