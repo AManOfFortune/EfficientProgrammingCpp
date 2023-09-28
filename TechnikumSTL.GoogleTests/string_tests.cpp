@@ -160,5 +160,65 @@ TEST(StringTests, appendShouldWorkForNonEmptyString)
 {
     technikum::string s("a");
     s.append("b");
-    ASSERT_TRUE(strcmp(s.c_str(), "ab") == 0);
+    s.append("c");
+    ASSERT_TRUE(strcmp(s.c_str(), "abc") == 0) << " - Recieved string: \"" << s << "\"";
+}
+
+TEST(StringTests, appendShouldWorkWhenChaining)
+{
+    technikum::string s("a");
+    s.append("b").append("c");
+    
+    ASSERT_TRUE(strcmp(s.c_str(), "abc") == 0) << " - Recieved string: \"" << s << "\"";
+}
+
+TEST(StringTests, copyConstructorShouldWorkOnStack)
+{
+    technikum::string s1("Hello");
+    technikum::string s2(s1);
+    ASSERT_TRUE(strcmp(s2.c_str(), "Hello") == 0);
+}
+
+TEST(StringTests, copyConstructorShouldWorkOnHeap)
+{
+    technikum::string s1("Hello");
+    technikum::string* s2 = new technikum::string(s1);
+    ASSERT_TRUE(strcmp(s2->c_str(), "Hello") == 0);
+
+    delete s2;
+}
+
+TEST(StringTests, copyAssignmentOperatorShouldWork)
+{
+    technikum::string s1("Hello");
+    technikum::string s2("World");
+    s2 = s1;
+    ASSERT_TRUE(strcmp(s2.c_str(), "Hello") == 0);
+}
+
+TEST(StringTests, copyAssignmentOperatorShouldNotCopySameObject)
+{
+    technikum::string s1("Hello");
+    s1 = s1;
+    ASSERT_TRUE(strcmp(s1.c_str(), "Hello") == 0);
+}
+
+TEST(StringTests, moveConstructorShouldWork)
+{
+    technikum::string s1("Hello");
+    technikum::string s2 = std::move(s1);
+
+    ASSERT_TRUE(s1.c_str() == nullptr);
+    ASSERT_TRUE(strcmp(s2.c_str(), "Hello") == 0);
+}
+
+TEST(StringTests, moveAssignmentOperatorShouldWork)
+{
+    technikum::string s1("Hello");
+    technikum::string s2("World");
+
+    s2 = std::move(s1);
+
+    ASSERT_TRUE(s1.c_str() == nullptr);
+    ASSERT_TRUE(strcmp(s2.c_str(), "Hello") == 0);
 }
