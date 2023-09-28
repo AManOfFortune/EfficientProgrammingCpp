@@ -27,12 +27,6 @@ namespace technikum
         return i;
     }
 
-    std::ostream& operator<<(std::ostream& os, const string& str)
-    {
-        os << str.str_;
-        return os;
-    }
-
     string::string()
     {
         size_ = 0;
@@ -41,18 +35,23 @@ namespace technikum
         strcpy("", str_);
     }
 
-    string::string(const string& str)
-        : string(str.c_str())
-    {
-    
-    }
-
     string::string(const char* str)
     {
         size_ = strlen(str);
         capacity_ = std::max(size_ + 1, string::kMinimumCapacity);
         str_ = new char[capacity_];
         strcpy(str, str_);
+    }
+
+    string::string(const string& str)
+        : string(str.c_str())
+    {
+
+    }
+
+    string::string(string&& str) noexcept
+    {
+        // TODO: Implement move constructor
     }
 
     string::~string()
@@ -126,6 +125,22 @@ namespace technikum
     unsigned int string::size() const
     {
         return size_;
+    }
+
+    std::ostream& operator<<(std::ostream& os, const string& str)
+    {
+        os << str.str_;
+        return os;
+    }
+
+    string& string::operator=(const string& str)
+    {
+        // TODO: Implement copy assignment
+    }
+
+    string& string::operator=(string&& str) noexcept
+    {
+        // TODO: Implement move assignment
     }
 
 };  // technikum
