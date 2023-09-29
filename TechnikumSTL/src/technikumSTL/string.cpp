@@ -1,5 +1,6 @@
 #include "string.h"
 
+#include <algorithm>
 #include <cassert>
 
 namespace technikum
@@ -26,58 +27,53 @@ namespace technikum
         return i;
     }
 
-    std::ostream& operator<<(std::ostream& os, const string& str)
-    {
-        os << str.str_;
-        return os;
-    }
-
     string::string()
     {
         size_ = 0;
-        capacity_ = size_ + 1;  // + 1 for the terminating null character!
-        str_ = new char[capacity_];  // TODO Increase minimum capacity to prevent memory fragmentation!
+        capacity_ = string::kMinimumCapacity;
+        str_ = new char[capacity_];
         strcpy("", str_);
+    }
+
+    string::string(const char* str)
+    {
+        save_string(str);
     }
 
     string::string(const string& str)
         : string(str.c_str())
     {
-    
+
     }
 
-    string::string(const char* str)
+    string::string(string&& str) noexcept
     {
-        size_ = strlen(str);
-        capacity_ = size_ + 1;  // + 1 for the terminating null character!
-        str_ = new char[capacity_];  // TODO Increase minimum capacity to prevent memory fragmentation!
-        strcpy(str, str_);
+        move_string(std::move(str));
     }
 
     string::~string()
     {
-        assert(str_ != nullptr);
-
-        delete[] str_;
+        free_memory();
     }
 
     void string::reserve(unsigned int capacity)
     {
-        // TODO Check for minimum capacity that can be reserved.
-
         // If we want to reserve less characters than our string currently holds do nothing.
         if (capacity <= size_) return;
+
+        // Do not reserve less than the minimum capacity.
+        capacity = std::max(capacity, string::kMinimumCapacity);
 
         assert(str_ != nullptr);
 
         // Temporarily store our string
         string temp(str_);
         // Free the allocated memory.
-        delete[] str_;
+        free_memory();
         // Update capacity_.
-        capacity_ = capacity + 1;
-        // Allocate new memory with size: capacity + 1 (for \0!)
-        str_ = new char[capacity + 1];
+        capacity_ = capacity;
+        // Allocate new memory with size of capacity.
+        str_ = new char[capacity];
         // Copy the temp string back.
         strcpy(temp.c_str(), str_);
     }
@@ -87,16 +83,16 @@ namespace technikum
         return capacity_;
     }
 
-    void string::append(const string& other)
+    string& string::append(const string& other)
     {
-        append(other.c_str());
+        return append(other.c_str());
     }
 
-    void string::append(const char* other)
+    string& string::append(const char* other)
     {
         // Do nothing if other length is 0.
         unsigned int otherLength = strlen(other);
-        if (otherLength == 0) return;
+        if (otherLength == 0) return *this;
 
         // Reserve enough space for str_ + other + \0.
         unsigned int thisLength = length();
@@ -109,6 +105,11 @@ namespace technikum
             str_[i] = other[j];
         }
         str_[i] = '\0';
+
+        // Save new size of string
+        size_ = strlen(str_);
+
+        return *this;
     }
 
     const char* string::c_str() const
@@ -124,6 +125,74 @@ namespace technikum
     unsigned int string::size() const
     {
         return size_;
+    }
+
+    std::ostream& operator<<(std::ostream& os, const string& str)
+    {
+        os << str.str_;
+        return os;
+    }
+
+    string& string::operator=(const string& str)
+    {
+        // Make sure we aren't doing this: "myObj = myObj;"
+        if (this != &str) 
+        {
+            // Free old memory
+            free_memory();
+            // Save new data
+            save_string(str.c_str());
+        }
+
+        return *this;
+    }
+
+    string& string::operator=(string&& str) noexcept
+    {
+        // Make sure we aren't doing self-assignment
+        if (this != &str)
+        {
+            // Free old memory
+            free_memory();
+            // Move new data
+            move_string(std::move(str));
+        }
+
+        return *this;
+    }
+
+    void string::save_string(const char* str) 
+    {
+        size_ = strlen(str);
+        capacity_ = std::max(size_ + 1, string::kMinimumCapacity);
+        str_ = new char[capacity_];
+        strcpy(str, str_);
+    }
+
+    void string::move_string(string&& str) 
+    {
+        // "Move" values from given string to this
+        size_ = str.size_;
+        capacity_ = str.capacity_;
+        str_ = str.str_;
+
+        // "Clear" values from given string
+        str.size_ = 0;
+        str.capacity_ = 0;
+        str.str_ = nullptr;
+    }
+
+    void string::free_memory()
+    {
+        // Make sure we dont call delete on a nullptr
+        if (str_ != nullptr) 
+        {
+            // Delete the allocated string memory
+            delete[] str_;
+
+            // Make sure str_ is in a valid state and does not point to garbage
+            str_ = nullptr;
+        }
     }
 
 };  // technikum
