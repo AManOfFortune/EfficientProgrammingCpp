@@ -222,3 +222,130 @@ TEST(StringTests, moveAssignmentOperatorShouldWork)
     ASSERT_TRUE(s1.c_str() == nullptr);
     ASSERT_TRUE(strcmp(s2.c_str(), "Hello") == 0);
 }
+
+TEST(StringTests, additionAssignmentOperatorShouldConcatenateTwoEmptyStrings)
+{
+    technikum::string s1("");
+    technikum::string s2("");
+
+    s1 += s2;
+    
+    ASSERT_TRUE(strcmp(s1.c_str(), "") == 0);
+}
+
+TEST(StringTests, additionAssignmentOperatorShouldConcatenateWithOneEmptyString)
+{
+    technikum::string s1("Hello!");
+    technikum::string s2("");
+
+    s1 += s2;
+
+    ASSERT_TRUE(strcmp(s1.c_str(), "Hello!") == 0);
+}
+
+TEST(StringTests, additionAssignmentOperatorShouldConcatenateTwoStrings)
+{
+    technikum::string s1("Hello, ");
+    technikum::string s2("world!");
+
+    s1 += s2;
+
+    ASSERT_TRUE(strcmp(s1.c_str(), "Hello, world!") == 0);
+}
+
+TEST(StringTests, additionAssignmentOperatorShouldConcatenateWithEmptyConstCharArray)
+{
+    technikum::string s1("Hello!");
+    const char* s2 = "";
+
+    s1 += s2;
+
+    ASSERT_TRUE(strcmp(s1.c_str(), "Hello!") == 0);
+}
+
+TEST(StringTests, additionAssignmentOperatorShouldConcatenateWithConstCharArray)
+{
+    technikum::string s1("Hello, ");
+    const char* s2 = "world!";
+
+    s1 += s2;
+
+    ASSERT_TRUE(strcmp(s1.c_str(), "Hello, world!") == 0);
+}
+
+TEST(StringTests, additionOperatorShouldConcatenateTwoEmptyStrings)
+{
+    technikum::string s1("");
+    technikum::string s2("");
+
+    technikum::string s3 = s1 + s2;
+
+    ASSERT_TRUE(strcmp(s3.c_str(), "") == 0);
+}
+
+TEST(StringTests, additionOperatorShouldConcatenateWithOneEmptyString)
+{
+    technikum::string s1("Hello!");
+    technikum::string s2("");
+
+    technikum::string s3 = s1 + s2;
+
+    ASSERT_TRUE(strcmp(s3.c_str(), "Hello!") == 0);
+}
+
+TEST(StringTests, additionOperatorShouldConcatenateTwoStrings)
+{
+    technikum::string s1("Hello, ");
+    technikum::string s2("world!");
+
+    technikum::string s3 = s1 + s2;
+
+    ASSERT_TRUE(strcmp(s3.c_str(), "Hello, world!") == 0);
+}
+
+TEST(StringTests, additionOperatorShouldNotAffectLeftHandSideString)
+{
+    technikum::string s1("Hello, ");
+    technikum::string s2("world!");
+
+    technikum::string s3 = s1 + s2;
+
+    ASSERT_TRUE(strcmp(s1.c_str(), "Hello, ") == 0);
+}
+
+TEST(StringTests, additionOperatorShouldConcatenateWithOneEmptyConstCharArray)
+{
+    technikum::string s1("Hello!");
+    const char* s2 = "";
+
+    technikum::string s3 = s1 + s2;
+
+    ASSERT_TRUE(strcmp(s3.c_str(), "Hello!") == 0);
+}
+
+TEST(StringTests, additionOperatorShouldConcatenateWithOneConstCharArray)
+{
+    technikum::string s1("Hello, ");
+    const char* s2 = "world!";
+
+    technikum::string s3 = s1 + s2;
+
+    ASSERT_TRUE(strcmp(s3.c_str(), "Hello, world!") == 0);
+}
+
+TEST(StringTests, additionOperatorShouldNotAffectLeftHandSideString2)
+{
+    technikum::string s1("Hello, ");
+    const char* s2 = "world!";
+
+    technikum::string s3 = s1 + s2;
+
+    ASSERT_TRUE(strcmp(s1.c_str(), "Hello, ") == 0);
+}
+
+TEST(StringTests, constCharArrayCastOperatorShouldWork)
+{
+    technikum::string s("Hello, world!");
+
+    ASSERT_TRUE(strcmp(s, "Hello, world!") == 0);
+}
