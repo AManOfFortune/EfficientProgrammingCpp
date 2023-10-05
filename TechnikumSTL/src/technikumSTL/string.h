@@ -40,6 +40,13 @@ public:
     string& operator =(const string& str); // Copy assignment operator
     string& operator =(string&& str) noexcept; // Move assignment operator
 
+    string& operator+=(const string& rhs);
+    string& operator+=(const char* rhs);
+    friend string operator+(string lhs, const string& rhs);
+    friend string operator+(string lhs, const char* rhs);
+
+    operator const char* () const { return c_str(); }
+
 private:
     char* str_ = nullptr;
     unsigned int size_;

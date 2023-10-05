@@ -161,6 +161,34 @@ namespace technikum
         return *this;
     }
 
+    string& string::operator+=(const string& rhs)
+    {
+        this->append(rhs);
+
+        return *this;
+    }
+
+    string& string::operator+=(const char* rhs)
+    {
+        this->append(rhs);
+
+        return *this;
+    }
+
+    string operator+(string lhs, const string& rhs)
+    {
+        lhs += rhs;
+        return lhs;
+    }
+
+    string operator+(string lhs, const char* rhs)
+    {
+        lhs += rhs;
+        return lhs;
+    }
+
+    // TODO Implement 
+
     void string::save_string(const char* str) 
     {
         size_ = strlen(str);
