@@ -163,31 +163,23 @@ namespace technikum
 
     string& string::operator+=(const string& rhs)
     {
-        this->append(rhs);
-
-        return *this;
+        return this->append(rhs);
     }
 
     string& string::operator+=(const char* rhs)
     {
-        this->append(rhs);
-
-        return *this;
+        return this->append(rhs);
     }
 
     string operator+(string lhs, const string& rhs)
     {
-        lhs += rhs;
-        return lhs;
+        return lhs += rhs;
     }
 
     string operator+(string lhs, const char* rhs)
     {
-        lhs += rhs;
-        return lhs;
+        return lhs += rhs;
     }
-
-    // TODO Implement 
 
     void string::save_string(const char* str) 
     {
