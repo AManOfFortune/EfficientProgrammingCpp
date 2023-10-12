@@ -181,7 +181,17 @@ namespace technikum
         return lhs += rhs;
     }
 
-    void string::save_string(const char* str) 
+    string::Iterator string::begin()
+    {
+        return Iterator(str_);
+    }
+
+    string::Iterator string::end()
+    {
+        return Iterator(str_ + size_);
+    }
+
+    void string::save_string(const char* str)
     {
         size_ = strlen(str);
         capacity_ = std::max(size_ + 1, string::kMinimumCapacity);
@@ -213,6 +223,39 @@ namespace technikum
             // Make sure str_ is in a valid state and does not point to garbage
             str_ = nullptr;
         }
+    }
+
+    char string::Iterator::operator*() const
+    {
+        return *currentPos_;
+    }
+
+    const char* string::Iterator::operator->() const
+    {
+        return currentPos_;
+    }
+
+    string::Iterator& string::Iterator::operator++()
+    {
+        ++currentPos_;
+        return *this;
+    }
+
+    string::Iterator string::Iterator::operator++(int)
+    {
+        string::Iterator retval = *this;
+        ++currentPos_;
+        return retval;
+    }
+
+    bool string::Iterator::operator==(const Iterator& other) const
+    {
+        return currentPos_ == other.currentPos_;
+    }
+
+    bool string::Iterator::operator!=(const Iterator& other) const
+    {
+        return currentPos_ != other.currentPos_;
     }
 
 };  // technikum

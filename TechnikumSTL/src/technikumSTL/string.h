@@ -47,6 +47,27 @@ public:
 
     operator const char* () const { return c_str(); }
 
+    class Iterator : public std::iterator<std::input_iterator_tag, char> 
+    {
+        public:
+            Iterator(const char* ptr) : currentPos_(ptr) {};
+
+            char operator*() const;
+            const char* operator->() const;
+
+            Iterator& operator++(); // pre increment operator
+            Iterator operator++(int); // post increment operator
+
+            bool operator==(const Iterator& other) const;
+            bool operator!=(const Iterator& other) const;
+
+        private:
+            const char* currentPos_;
+    };
+
+    Iterator begin();
+    Iterator end();
+
 private:
     char* str_ = nullptr;
     unsigned int size_;

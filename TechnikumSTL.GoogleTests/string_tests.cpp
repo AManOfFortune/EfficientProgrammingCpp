@@ -349,3 +349,60 @@ TEST(StringTests, constCharArrayCastOperatorShouldWork)
 
     ASSERT_TRUE(strcmp(s, "Hello, world!") == 0);
 }
+
+TEST(StringTests, IteratorBeginShouldWork) {
+    technikum::string s("Hello, world!");
+    technikum::string::Iterator it = s.begin();
+
+    ASSERT_EQ(*it, 'H');
+}
+
+TEST(StringTests, IteratorEndShouldWork) {
+    technikum::string s("Hello, world!");
+    technikum::string::Iterator it = s.end();
+
+    ASSERT_EQ(*it, '\0');
+}
+
+
+TEST(StringTests, IteratorIncrementShouldWork) {
+    technikum::string s("Hello, world!");
+    technikum::string::Iterator it = s.begin();
+
+    ++it;
+    ASSERT_EQ(*it, 'e');
+    it++;
+    ASSERT_EQ(*it, 'l');
+}
+
+TEST(StringTests, IteratorEqualityShouldWork) {
+    technikum::string s("Hello, world!");
+    technikum::string::Iterator it1 = s.begin();
+    technikum::string::Iterator it2 = s.begin();
+
+    ASSERT_EQ(it1, it2);
+    ++it1;
+    ASSERT_NE(it1, it2);
+}
+
+TEST(StringTests, IteratorIterationShouldWork) {
+    technikum::string s("Hello, world!");
+    technikum::string::Iterator it = s.begin();
+    std::string result;
+
+    while (it != s.end()) {
+        result += *it;
+        ++it;
+    }
+
+    ASSERT_EQ(result, "Hello, world!");
+}
+
+TEST(StringTests, IteratorSearchShouldWork) {
+    technikum::string s("Hello, world!");
+
+    technikum::string::Iterator it = std::find(s.begin(), s.end(), 'o');
+
+    ASSERT_NE(it, s.end());
+    ASSERT_EQ(*it, 'o');
+}
