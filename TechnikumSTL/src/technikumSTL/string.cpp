@@ -248,6 +248,19 @@ namespace technikum
         return retval;
     }
 
+    string::Iterator& string::Iterator::operator--()
+    {
+        --currentPos_;
+        return *this;
+    }
+
+    string::Iterator string::Iterator::operator--(int)
+    {
+        string::Iterator retval = *this;
+        --currentPos_;
+        return retval;
+    }
+
     bool string::Iterator::operator==(const Iterator& other) const
     {
         return currentPos_ == other.currentPos_;

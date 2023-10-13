@@ -375,6 +375,16 @@ TEST(StringTests, IteratorIncrementShouldWork) {
     ASSERT_EQ(*it, 'l');
 }
 
+TEST(StringTests, IteratorDecrementShouldWork) {
+    technikum::string s("Hello, world!");
+    technikum::string::Iterator it = s.end();
+
+    --it;
+    ASSERT_EQ(*it, '!');
+    it--;
+    ASSERT_EQ(*it, 'd');
+}
+
 TEST(StringTests, IteratorEqualityShouldWork) {
     technikum::string s("Hello, world!");
     technikum::string::Iterator it1 = s.begin();

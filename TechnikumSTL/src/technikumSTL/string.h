@@ -47,16 +47,21 @@ public:
 
     operator const char* () const { return c_str(); }
 
-    class Iterator : public std::iterator<std::input_iterator_tag, char> 
+    class Iterator : public std::iterator<std::bidirectional_iterator_tag, char> 
     {
         public:
             Iterator(const char* ptr) : currentPos_(ptr) {};
+
+            Iterator() = default; // Marks class as trivial, meaning no heap is allocated within, it only contains primitive datatypes
 
             char operator*() const;
             const char* operator->() const;
 
             Iterator& operator++(); // pre increment operator
             Iterator operator++(int); // post increment operator
+
+            Iterator& operator--(); // pre decrement operator
+            Iterator operator--(int); // post decrement operator
 
             bool operator==(const Iterator& other) const;
             bool operator!=(const Iterator& other) const;
