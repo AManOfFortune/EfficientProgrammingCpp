@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\technikumSTL\string.h" />
+    <ClInclude Include="src\technikumSTL\unique_ptr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\technikumSTL\string.cpp" />

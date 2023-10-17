@@ -18,6 +18,9 @@
     <ClInclude Include="src\technikumSTL\string.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\technikumSTL\unique_ptr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\technikumSTL\string.cpp">
