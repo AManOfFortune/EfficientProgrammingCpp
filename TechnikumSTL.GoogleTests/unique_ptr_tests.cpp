@@ -121,3 +121,27 @@ TEST(UniquePtrTests, BooleanOperatorOverloadShouldEqualsFalse)
 
     ASSERT_FALSE(unique);
 }
+
+TEST(UniquePtrTests, ResetWithCustomLambdaDeleter)
+{
+    bool deleterCalled = false;
+    auto customDeleter = [&deleterCalled](int* ptr) {
+        deleterCalled = true;
+        delete ptr;
+        };
+
+    technikum::unique_ptr<int, decltype(customDeleter)> unique(new int(1), customDeleter);
+
+    unique.Reset();
+
+    ASSERT_TRUE(deleterCalled);
+}
+
+TEST(UniquePtrTests, ResetWithDefaultDeleter)
+{
+    technikum::unique_ptr<int> unique(new int(1));
+
+    unique.Reset();
+
+    ASSERT_TRUE(unique.get() == nullptr);
+}

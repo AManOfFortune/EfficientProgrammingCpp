@@ -3,17 +3,13 @@
 namespace technikum
 {
 
-template <typename T>
+template <typename T, typename CustomDeleter = std::default_delete<T>>
 class unique_ptr
 {
 public:
-    explicit unique_ptr(T* ptr = nullptr) : ptr_(ptr) {}
+    explicit unique_ptr(T* ptr = nullptr, CustomDeleter deleter = CustomDeleter()) : ptr_(ptr) , deleter_(deleter) {}
 
-    // Anmerkung - Aufgabe 1 War es, Rule of Five zu implementieren, allerdings weiß ich nicht,
-    // ob eine Unique Pointer Klasse einen Copy Constructor benötigt, es soll ja nur einen Verweis
-    // auf das Datum geben. Weiß also nicht ob alles fertig ist - Raoul.
-
-    // Don't think unique pointer needs copy constructor and assignment since ownership should change on assingment - Raoul.
+    // Unique pointer does not need copy constructor and assignment since ownership should change on assingment.
     unique_ptr(const unique_ptr& other) = delete;
 
     // Move constructor.
@@ -23,11 +19,12 @@ public:
         other.ptr_ = nullptr;
     }
     
-    ~unique_ptr() { delete ptr_; }
+    ~unique_ptr() { deleter_(ptr_); }
 
-    // Don't think unique pointer needs copy constructor and assignment since ownership should change on assingment - Raoul.
+    // Unique pointer doesn't copy constructor and assignment since ownership should change on assingment.
     unique_ptr& operator=(const unique_ptr& other) = delete;
 
+    // Move assignment operator
     unique_ptr& operator=(unique_ptr&& other) noexcept
     {
         // Change ownership.
@@ -54,8 +51,8 @@ public:
 
     void Reset()
     {
-        delete ptr_;
-        // I think multiple deletes could lead to unexpected behaviour if not set to nullptr afterwards - Raoul.
+        deleter_(ptr_);
+        // Multiple deletes could lead to unexpected behaviour if not set to nullptr afterwards.
         ptr_ = nullptr;  // https://stackoverflow.com/questions/1931126/is-it-good-practice-to-null-a-pointer-after-deleting-it
     }
 
@@ -72,14 +69,13 @@ public:
         *ptr_ = *other;
         *other = temp;
     }
-
-    // TODO 3 Implement custom deleters (Don't know what those are).
     
     // For testing purposes.
     T* get() const { return ptr_; }
     
 private:
     T* ptr_;
+    CustomDeleter deleter_;
 };
 
 }
